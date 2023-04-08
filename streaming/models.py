@@ -24,6 +24,18 @@ class Movie(models.Model):
     subscription_plans = models.ManyToManyField(SubscriptionPlan, related_name='movies')
     def __str__(self) -> str:
         return self.title
+    def average_rating(self):
+        reviews = self.reviews.all()
+        total_rating = sum([review.rating for review in reviews])
+        count = len(reviews)
+        
+        if count > 0:
+            return round(total_rating / count, 1)
+        else:
+            return 'No reviews'
+    def review_count(self):
+        return self.reviews.count()
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -4,22 +4,107 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ movie.title }}</title>
     {% load static %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap">
     <style>
-        img {
-            height: 10px;
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Poppins', sans-serif;
+            margin: 20px;
+
+        }
+
+        .movie-header {
+            background-color: #212529;
+            color: #fff;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .review-card {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .review-rating {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+            transform: translateY(3px);
+            transition: all 0.3s ease;
+        }
+
+        .review-rating img {
+            height: 20px;
+        }
+
+        .review-user {
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .review-comment {
+            font-size: 0.9rem;
+            margin: 0.5rem 0 0 0;
+            color: #555;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #007bff;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #0056b3;
+            transform: translateX(5px);
         }
     </style>
 </head>
 <body>
-    <h1>{{ movie.title }}</h1>
-    {% for review in movie.reviews.all %}
-    <p>
-        <img src="{% static 'streaming/' %}{{review.rating}}.png" alt="{{ review.rating }} star rating"> <em>{{review.user.user}}</em>: {{review.comment}}
-    </p>
-    {% endfor %}
+    <div class="container">
+        <div class="movie-header">
+            <h1>{{ movie.title }} ({{ movie.average_rating }} ★)</h1>
+            <h4> {{ movie.review_count }} ratings</h4>
+        </div>
 
-    <a href="{% url 'index' %}">Back</a>
+        {% for review in movie.reviews.all %}
+        <div class="review-card">
+            <div class="review-header">
+                <span class="review-rating"><img src="{% static 'streaming/' %}{{review.rating}}.png" alt="{{ review.rating }} star rating"></span>
+                <span class="review-user"><a href="{% url 'user_reviews' review.user.id %}">{{review.user.user}}</a></span>
+            </div>
+            <div class="review-comment">{{review.comment}}</div>
+        </div>
+        {% endfor %}
+
+        <a href="{% url 'index' %}" class="back-link">Back to Movies</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6en8XCp+HHAAK5GSLf2xlYtvJ8U2Q4U+9cuEnJoa3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xdOF7jKtYcqXt56hJ8BxGKzvCcsD88rJhPxZ8LdWXd7v//TJy3V7FWg8sKxty7vE" crossorigin="anonymous"></script>
 </body>
 </html>
